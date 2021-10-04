@@ -19,19 +19,6 @@ const getRandomVar = (min, max, decimalPlaces) => {
   return number.toFixed(decimalPlaces);
 };
 
-const AVATARS = [
-  'img/avatars/user01.png',
-  'img/avatars/user02.png',
-  'img/avatars/user03.png',
-  'img/avatars/user04.png',
-  'img/avatars/user05.png',
-  'img/avatars/user06.png',
-  'img/avatars/user07.png',
-  'img/avatars/user08.png',
-  'img/avatars/user09.png',
-  'img/avatars/user10.png',
-];
-
 const OFFER_TITLE = [
   'Милая, уютная квартира в центре Токио',
   'Бунгло на берегу залива',
@@ -87,6 +74,8 @@ const HOUSING_DESCRIPTION = [
   'Он по-французски совершеннно мог изъясняться и писал, легко мазурку танцевал и кланялся непринужденно. Чего ж вам больше? Свет решил, что он умен и очень мил',
 ];
 
+const AUTHOR_HOUSING = [0, 9];
+
 const LOCATION_LAT = [35.65, 35.7, 5];
 
 const LOCATION_LNG = [139.7, 139.8, 5];
@@ -114,43 +103,38 @@ const getPhotosArray = () => {
 // функция возвращает  случайный элемент массива
 const getRandomElement = (elements) => elements[getRandomInt(0, elements.length-1)];
 
-// eslint-disable-next-line arrow-body-style
 const getAuthorHousing = () => {
-  return {avatar: getRandomElement(AVATARS)};
+  const index = getRandomInt(...AUTHOR_HOUSING);
+  if (index >= 9) {
+    return { author: `img/avatars/user${  index + 1  }.png`};
+  } else {
+    return { author: `img/avatars/user0${  index + 1  }.png`};
+  }
 };
 
-// eslint-disable-next-line arrow-body-style
-const getLocationHousing = () => {
-  return  {
-    lat: getRandomVar(...LOCATION_LAT),
-    lng: getRandomVar(...LOCATION_LNG),
-  };
-};
+const getLocationHousing = () => ({
+  lat: getRandomVar(...LOCATION_LAT),
+  lng: getRandomVar(...LOCATION_LNG),
+});
 
-// eslint-disable-next-line arrow-body-style
-const getOfferHousing = () => {
-  return {
-    title: getRandomElement(OFFER_TITLE),
-    addres: getLocationHousing(), // ?
-    price: getRandomInt(...PRICE_HOUSING),
-    type: getRandomElement(HOUSING_TYPE),
-    rooms: getRandomInt(...ROOMS_HOUSING),
-    quests: getRandomInt(...QUESTS_HOUSING),
-    checkin: getRandomElement(TIME_CHECKIN),
-    checkout: getRandomElement(TIME_CHECKIN),
-    features: getFeaturesArray(),
-    description: getRandomElement(HOUSING_DESCRIPTION) ,
-    photos: getPhotosArray(),
-  };
-};
+const getOfferHousing = () => ({
+  title: getRandomElement(OFFER_TITLE),
+  addres: getLocationHousing(), // ?
+  price: getRandomInt(...PRICE_HOUSING),
+  type: getRandomElement(HOUSING_TYPE),
+  rooms: getRandomInt(...ROOMS_HOUSING),
+  quests: getRandomInt(...QUESTS_HOUSING),
+  checkin: getRandomElement(TIME_CHECKIN),
+  checkout: getRandomElement(TIME_CHECKIN),
+  features: getFeaturesArray(),
+  description: getRandomElement(HOUSING_DESCRIPTION) ,
+  photos: getPhotosArray(),
+});
 
-// eslint-disable-next-line arrow-body-style
-const getCreateHousing = () => {
-  return {
-    author: getAuthorHousing(),
-    offer: getOfferHousing(),
-    location: getLocationHousing(),
-  };
-};
+const getCreateHousing = () => ({
+  author: getAuthorHousing(),
+  offer: getOfferHousing(),
+  location: getLocationHousing(),
+});
 
 const baseHousings = Array.from({length: BASE_HOUSING_COUNT}, getCreateHousing);
