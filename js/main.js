@@ -88,28 +88,22 @@ const QUESTS_HOUSING = [1, 20];
 
 const BASE_HOUSING_COUNT = 10;
 
-// новый массив фичи
-const getFeaturesArray = () => {
-  const arrayLen = getRandomInt(1, HOUSING_FEATURE.length);
-  return HOUSING_FEATURE.slice(0, arrayLen);
-};
-
-//новый  массив фото интерьера
-const getPhotosArray = () => {
-  const arrayLen = getRandomInt(1, HOUSING_PHOTOS.length);
-  return HOUSING_PHOTOS.slice(0, arrayLen);
+const getArrayElements = (elements) => {
+  const  getElement = () => {
+    const index = getRandomInt(0, elements.length - 1);
+    return elements[index];
+  };
+  const arrayLen = getRandomInt(1, elements.length);
+  const ArrayElements = Array.from({length: arrayLen}, getElement);
+  return [...new Set(ArrayElements)];
 };
 
 // функция возвращает  случайный элемент массива
 const getRandomElement = (elements) => elements[getRandomInt(0, elements.length-1)];
 
 const getAuthorHousing = () => {
-  const index = getRandomInt(...AUTHOR_HOUSING);
-  if (index >= 9) {
-    return { author: `img/avatars/user${  index + 1  }.png`};
-  } else {
-    return { author: `img/avatars/user0${  index + 1  }.png`};
-  }
+  const index = getRandomInt(...AUTHOR_HOUSING) +1;
+  return { avatar: `img/avatars/user${(index <= 9) ? `0${  index}` : index  }.png`};
 };
 
 const getLocationHousing = () => ({
@@ -126,9 +120,9 @@ const getOfferHousing = () => ({
   quests: getRandomInt(...QUESTS_HOUSING),
   checkin: getRandomElement(TIME_CHECKIN),
   checkout: getRandomElement(TIME_CHECKIN),
-  features: getFeaturesArray(),
+  features: getArrayElements(HOUSING_FEATURE),
   description: getRandomElement(HOUSING_DESCRIPTION) ,
-  photos: getPhotosArray(),
+  photos: getArrayElements(HOUSING_PHOTOS),
 });
 
 const getCreateHousing = () => ({
