@@ -99,11 +99,6 @@ const getArrayElements = (elements) => {
 // функция возвращает  случайный элемент массива
 const getRandomElement = (elements) => elements[getRandomInt(0, elements.length-1)];
 
-// const getAuthorHousing = () => {
-//   const index = getRandomInt(...AUTHOR_HOUSING) +1;
-//   return { avatar: `img/avatars/user${(index <= 9) ? `0${  index}` : index  }.png`};
-// };
-
 const getAuthorHousing = (index) => {
   index = index + 1;
   return { avatar: `img/avatars/user${(index <= 9) ? `0${  index}` : index  }.png`};
