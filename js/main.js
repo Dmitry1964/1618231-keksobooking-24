@@ -65,7 +65,7 @@ const HOUSING_DESCRIPTION = [
   'Мой дядя самых честных правил, когда не в шутку занемог, он уважать себя заставил и лучше выдумать не смог',
   'Его пример другим наука, но боже мой, какая скука сидеть с больным и день и ночь, не отходить не шагу прочь',
   'Какое низкое коварство полуживого забавлять, ему подушки поправлять, печально подносить лекарство, вздыхать и думать про себя - когда же черт возьмет тебя.',
-  'Друзья Людмилы и Руслана с героем моего романа без промедленья в тот же час позвольте познакомить вас.',
+  'Друзья Людмилы и Руслана, с героем моего романа без промедленья в тот же час позвольте познакомить вас.',
   'Онегин - добрый мой приятель, родился на брегах Невы, где может быть родились вы или блистали, мой читатель. Там некогда гулял и я, но вреден север для меня.',
   'Судьба Онегина хранила, сперва мадам за ни ходила, потом мёсье ее сменил, ребенок был резов, но мил.',
   'Мёсье эль Аббе - француз убогой, что б не измучилось дитя, учил его всему шутя. Не докучал моралью строго, слегка за шалости бранил и в летний сад гулять водил.',
@@ -73,8 +73,6 @@ const HOUSING_DESCRIPTION = [
   'Вот мой Онегин на свободе, острижен по последней моде, как денди лондонский одет - и наконец увидел свет',
   'Он по-французски совершеннно мог изъясняться и писал, легко мазурку танцевал и кланялся непринужденно. Чего ж вам больше? Свет решил, что он умен и очень мил',
 ];
-
-const AUTHOR_HOUSING = [0, 9];
 
 const LOCATION_LAT = [35.65, 35.7, 5];
 
@@ -101,8 +99,13 @@ const getArrayElements = (elements) => {
 // функция возвращает  случайный элемент массива
 const getRandomElement = (elements) => elements[getRandomInt(0, elements.length-1)];
 
-const getAuthorHousing = () => {
-  const index = getRandomInt(...AUTHOR_HOUSING) +1;
+// const getAuthorHousing = () => {
+//   const index = getRandomInt(...AUTHOR_HOUSING) +1;
+//   return { avatar: `img/avatars/user${(index <= 9) ? `0${  index}` : index  }.png`};
+// };
+
+const getAuthorHousing = (index) => {
+  index = index + 1;
   return { avatar: `img/avatars/user${(index <= 9) ? `0${  index}` : index  }.png`};
 };
 
@@ -113,7 +116,7 @@ const getLocationHousing = () => ({
 
 const getOfferHousing = () => ({
   title: getRandomElement(OFFER_TITLE),
-  addres: getLocationHousing(), // ?
+  address: `${getRandomVar(...LOCATION_LAT)  },${  getRandomVar(...LOCATION_LNG)}`,
   price: getRandomInt(...PRICE_HOUSING),
   type: getRandomElement(HOUSING_TYPE),
   rooms: getRandomInt(...ROOMS_HOUSING),
@@ -125,10 +128,16 @@ const getOfferHousing = () => ({
   photos: getArrayElements(HOUSING_PHOTOS),
 });
 
-const getCreateHousing = () => ({
-  author: getAuthorHousing(),
-  offer: getOfferHousing(),
-  location: getLocationHousing(),
-});
+const getCreateHousing = () => {
+  const baseHousings = [];
+  for (let i = 0; i <= BASE_HOUSING_COUNT - 1; i++) {
+    baseHousings.push({
+      author: getAuthorHousing(i),
+      offer: getOfferHousing(),
+      location: getLocationHousing(),
+    });
+  }
+  return baseHousings;
+};
 
-const baseHousings = Array.from({length: BASE_HOUSING_COUNT}, getCreateHousing);
+console.log(getCreateHousing());
