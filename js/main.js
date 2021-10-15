@@ -1,1 +1,1 @@
-import {baseHousings as offers} from './data.js';
+import {mapCanvas as cards} from './cards.js';

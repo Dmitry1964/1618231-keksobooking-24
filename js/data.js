@@ -98,7 +98,7 @@ const getArrayElements = (elements) => {
     const index = getRandomInt(0, elements.length - 1);
     return elements[index];
   };
-  const arrayLen = getRandomInt(1, elements.length);
+  const arrayLen = getRandomInt(0, elements.length);
   const ArrayElements = Array.from({length: arrayLen}, getElement);
   return [...new Set(ArrayElements)];
 };
