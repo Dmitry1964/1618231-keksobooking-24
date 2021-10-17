@@ -1,12 +1,10 @@
 import {baseHousings as offers} from './data.js';
-
+import { numDecline } from './utilits.js';
 
 const mapCanvas = document.querySelector('.map__canvas');
 const templateFragment = document.querySelector('#card').content;
 const template = templateFragment.querySelector('.popup');
 const fragment = document.createDocumentFragment();
-
-//определяем тип жилья
 
 const getTypeHousing = (index) => {
   const typeOffer = offers[index].offer.type;
@@ -49,8 +47,9 @@ const getPhotosPopup = (index, listPhotos) => {
   });
 };
 
-
-for ( let i = 0; i < offers.length; i++) {
+const getCardsHousing = (i) => {
+  const { avatar } = offers[i].author;
+  const { title, address, price, type, rooms, quests, checkin, checkout, features, description, photos} = offers[i].offer;
   const element = template.cloneNode(true);
   const avatarPopup = element.querySelector('.popup__avatar');
   const titlePopup = element.querySelector('.popup__title');
@@ -63,20 +62,25 @@ for ( let i = 0; i < offers.length; i++) {
   const descriptionPopup = element.querySelector('.popup__description');
   const photosPopupList = element.querySelector('.popup__photos');
 
-  (offers[i].author.avatar) ? avatarPopup.src = offers[i].author.avatar : avatarPopup.classList.add('hidden');
-  (offers[i].offer.title) ? titlePopup.textContent = offers[i].offer.title : titlePopup.classList.add('hidden');
-  (offers[i].offer.address) ? addressPopup.textContent = offers[i].offer.address : addressPopup.classList.add('hidden');
-  (offers[i].offer.price) ? pricePopup.textContent = `${offers[i].offer.price  } ₽/ночь` : pricePopup.classList.add('hidden');
-  typePopup.textContent = getTypeHousing(i);
-  capacityPopup.textContent = `${offers[i].offer.rooms  } комнат для ${  offers[i].offer.quests  } гостей`;
-  timePopup.textContent = `Заезд после ${  offers[i].offer.checkin  } , выезд до${  offers[i].offer.checkout}`;
+  (avatar) ? avatarPopup.src = offers[i].author.avatar : avatarPopup.classList.add('hidden');
+  (title) ? titlePopup.textContent = title : titlePopup.classList.add('hidden');
+  (address) ? addressPopup.textContent = address : addressPopup.classList.add('hidden');
+  (price) ? pricePopup.textContent = `${price  } ₽/ночь` : pricePopup.classList.add('hidden');
+  (type) ? typePopup.textContent = getTypeHousing(i) : typePopup.classList.add('hidden');
+  (!rooms || !quests) ?
+    capacityPopup.classList.add('hidden') :
+    capacityPopup.textContent = `${rooms  } ${  numDecline(rooms, 'комната', 'комнаты', 'комнат')} для ${  `${quests  } ${  numDecline(quests, 'гостя', 'гостей', 'гостей')}`  } `;
+  (!checkin || !checkout) ?
+    timePopup.classList.add('hidden') :
+    timePopup.textContent = `Заезд после ${  checkin  } , выезд до${  checkout}`;
+  (features.length !== 0) ? getFeaturesPopup(i, featuresList) : featuresList.classList.add('hidden');
+  (description) ? descriptionPopup.textContent = description : descriptionPopup.classList.add('hidden');
+  (photos.length !== 0) ? getPhotosPopup(i, photosPopupList) : photosPopupList.classList.add('hidden');
+  return element;
+};
 
-  (offers[i].offer.features.length !== 0) ? getFeaturesPopup(i, featuresList) : featuresList.classList.add('hidden');
-  (offers[i].offer.description) ? descriptionPopup.textContent = offers[i].offer.description : descriptionPopup.classList.add('hidden');
-  (offers[i].offer.photos.length !== 0) ? getPhotosPopup(i, photosPopupList) : photosPopupList.classList.add('hidden');
-
-  fragment.appendChild(element);
+for ( let i = 0; i < offers.length; i++) {
+  fragment.appendChild(getCardsHousing(i));
 }
 mapCanvas.appendChild(fragment.children[5]);
-
 export {mapCanvas};

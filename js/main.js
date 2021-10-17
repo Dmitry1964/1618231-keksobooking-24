@@ -1,1 +1,1 @@
-import {mapCanvas as cards} from './cards.js';
+import {mapCanvas} from './cards.js';
