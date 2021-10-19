@@ -6,8 +6,7 @@ const templateFragment = document.querySelector('#card').content;
 const template = templateFragment.querySelector('.popup');
 const fragment = document.createDocumentFragment();
 
-const getTypeHousing = (index) => {
-  const typeOffer = offers[index].offer.type;
+const getTypeHousing = (typeOffer) => {
   if (typeOffer === 'flat') {
     return 'Квартира';
   } else if (typeOffer === 'bungalow') {
@@ -47,9 +46,9 @@ const getPhotosPopup = (index, listPhotos) => {
   });
 };
 
-const getCardsHousing = (i) => {
-  const { avatar } = offers[i].author;
-  const { title, address, price, type, rooms, quests, checkin, checkout, features, description, photos} = offers[i].offer;
+const getCardsHousing = (arr) => {
+  const { avatar } = arr.author;
+  const { title, address, price, type, rooms, quests, checkin, checkout, features, description, photos} = arr.offer;
   const element = template.cloneNode(true);
   const avatarPopup = element.querySelector('.popup__avatar');
   const titlePopup = element.querySelector('.popup__title');
@@ -62,25 +61,24 @@ const getCardsHousing = (i) => {
   const descriptionPopup = element.querySelector('.popup__description');
   const photosPopupList = element.querySelector('.popup__photos');
 
-  (avatar) ? avatarPopup.src = offers[i].author.avatar : avatarPopup.classList.add('hidden');
+  (avatar) ? avatarPopup.src = arr.author.avatar : avatarPopup.classList.add('hidden');
   (title) ? titlePopup.textContent = title : titlePopup.classList.add('hidden');
   (address) ? addressPopup.textContent = address : addressPopup.classList.add('hidden');
   (price) ? pricePopup.textContent = `${price  } ₽/ночь` : pricePopup.classList.add('hidden');
-  (type) ? typePopup.textContent = getTypeHousing(i) : typePopup.classList.add('hidden');
+  (type) ? typePopup.textContent = getTypeHousing(type) : typePopup.classList.add('hidden');
   (!rooms || !quests) ?
     capacityPopup.classList.add('hidden') :
     capacityPopup.textContent = `${rooms  } ${  numDecline(rooms, 'комната', 'комнаты', 'комнат')} для ${  `${quests  } ${  numDecline(quests, 'гостя', 'гостей', 'гостей')}`  } `;
   (!checkin || !checkout) ?
     timePopup.classList.add('hidden') :
     timePopup.textContent = `Заезд после ${  checkin  } , выезд до${  checkout}`;
-  (features.length !== 0) ? getFeaturesPopup(i, featuresList) : featuresList.classList.add('hidden');
+  (features.length !== 0) ? getFeaturesPopup(0, featuresList) : featuresList.classList.add('hidden');
   (description) ? descriptionPopup.textContent = description : descriptionPopup.classList.add('hidden');
-  (photos.length !== 0) ? getPhotosPopup(i, photosPopupList) : photosPopupList.classList.add('hidden');
+  (photos.length !== 0) ? getPhotosPopup(0, photosPopupList) : photosPopupList.classList.add('hidden');
   return element;
 };
 
-for ( let i = 0; i < offers.length; i++) {
-  fragment.appendChild(getCardsHousing(i));
-}
-mapCanvas.appendChild(fragment.children[5]);
+fragment.appendChild(getCardsHousing(offers[0]));
+
+mapCanvas.appendChild(fragment);
 export {mapCanvas};
