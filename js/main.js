@@ -1,2 +1,2 @@
-import {mapCanvas} from './cards.js';
-import { offerTitle} from './form.js';
+import { mapCanvas } from './cards.js';
+import { offerPrice } from './form.js';

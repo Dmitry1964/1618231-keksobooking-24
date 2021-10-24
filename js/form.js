@@ -1,4 +1,4 @@
-const MinOfferPrice = {
+const minOfferPrice = {
   bungalow: 0,
   flat: 1000,
   hotel: 3000,
@@ -6,78 +6,73 @@ const MinOfferPrice = {
   palace: 10000,
 };
 
-const offerTitle = document.querySelector('#title');
-const minTitleLength = parseInt(offerTitle.attributes.minlength.value, 10);
-const maxTitleLength = parseInt(offerTitle.attributes.maxlength.value, 10);
+const numberOfGuests = {
+  1: ['1'],
+  2: ['1', '2'],
+  3: ['1', '2', '3'],
+  100: ['0'],
+};
 
-offerTitle.addEventListener('input', () => {
-  const valueLength = offerTitle.value.length;
-  if ( valueLength < minTitleLength) {
-    offerTitle.setCustomValidity(`Еще ${  minTitleLength - valueLength  } симв.`);
-  } else if( valueLength === maxTitleLength) {
-    offerTitle.setCustomValidity('Вы ввели максимальное допустимое количество знаков');
-  } else {
-    offerTitle.setCustomValidity('');
-  }
-  offerTitle.reportValidity();
-});
+const disabledFields = document.querySelectorAll('select.map__filter, fieldset');
 
-////////////////////////////////////////////////////////////
-const getMinPrice = (key) => MinOfferPrice[key];
+const setDisabledFields = () => {
+  disabledFields.forEach((item) => {
+    item.disabled = !item.disabled;
+  });
+};
+
+setDisabledFields();
 
 const offerType = document.querySelector('#type');
 const offerPrice = document.querySelector('#price');
-const maxPriceValue = parseInt(offerPrice.attributes.max.value, 10);
 
-offerType.addEventListener('change', () => {
+const onOfferTypeChange = () => {
   offerPrice.value = '';
-  offerPrice.attributes.placeholder.value = getMinPrice(offerType.value);
-});
+  offerPrice.placeholder = minOfferPrice[offerType.value];
+  offerPrice.min = minOfferPrice[offerType.value];
+};
 
-offerPrice.addEventListener('change', () => {
+offerType.addEventListener('change', onOfferTypeChange);
+
+const onOfferPriceInput = () => {
   let valuePrice = 0;
   valuePrice = offerPrice.value;
-  const minValuePrice = parseInt(getMinPrice(offerType.value), 10);
-  if (valuePrice < minValuePrice) {
-    offerPrice.setCustomValidity(`Минимальная цена ${  minValuePrice}`);
-  } else if (valuePrice > maxPriceValue) {
-    offerPrice.setCustomValidity(`Цена не должна быть больше${  maxPriceValue}`);
+  if (valuePrice < parseInt(offerPrice.min, 10)) {
+    offerPrice.setCustomValidity(`Минимальная цена ${offerPrice.min}`);
+  } else if (valuePrice > parseInt(offerPrice.max, 10)) {
+    offerPrice.setCustomValidity(`Цена не должна быть больше${offerPrice.max}`);
   } else {
     offerPrice.setCustomValidity('');
   }
   offerPrice.reportValidity();
-});
+};
+
+offerPrice.addEventListener('input', onOfferPriceInput);
 
 ///////////////////////////////////////////////////////////////////////
-const offerCapacity = document.querySelectorAll('#capacity > option');
-const offerRooms = document.querySelector('#room_number');
+const guestNumber = document.querySelectorAll('#capacity > option');
+const roomNumber = document.querySelector('#room_number');
 
-const getCapacityList = (rooms) => {
-  offerCapacity.forEach ((element) => {
-    element.disabled = false;
-    if(rooms < parseInt(element.value, 10)) {
-      element.disabled = true;
-    }
-    if (element.value === '0') {
-      element.disabled = true;
-    }
+const validateRooms = () => {
+  const roomValue = roomNumber.value;
+  console.log(roomValue);
+  guestNumber.forEach((guest) => {
+    // в зависимости от количества комнат получаем нужный массив строк из объекта numberOfGuests
+    //с помощью метода indexOf смотрим, есть ли в этом массиве элемен равный значению value из option в переменной guestNumber
+    //если есть, то метод возвращает нам индекс элемента. он не равен -1, поэтому получаем булево false
+    // если элемента нет метод возвращает -1, булево true. Дальше присваиваем атрибутам disabled и hidden полученные булево.
+    const isDisabled = (numberOfGuests[roomValue].indexOf(guest.value) === -1);
+    // здесь делам так, чтобы option, у которого value равен первому елементу в массиве строк, имел атрибут selected = true;
+    guest.selected = numberOfGuests[roomValue][0] === guest.value;
+    guest.disabled = isDisabled;
+    guest.hidden = isDisabled;
   });
 };
 
-const getCapacity = () => {
-  offerCapacity.forEach((element) => {
-    element.disabled = true;
-    if (element.value === '0') {
-      element.disabled = false;
-    }
-  });
+validateRooms();
+const onRoomNumberChange = () => {
+  validateRooms();
 };
+roomNumber.addEventListener('change', onRoomNumberChange);
 
-offerRooms.addEventListener('click', () => {
-  const roomsValue = parseInt(offerRooms.value, 10);
-  if (roomsValue === 100) {
-    getCapacity();
-  } else {getCapacityList(roomsValue);}
-});
-
-export {offerTitle};
+export { offerPrice };
