@@ -1,3 +1,9 @@
+const TIME_CHECKIN = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
+
 const minOfferPrice = {
   bungalow: 0,
   flat: 1000,
@@ -13,7 +19,14 @@ const numberOfGuests = {
   100: ['0'],
 };
 
+const disabledForm = document.querySelector('.ad-form');
+const disabledFormFilters = document.querySelector('.map__filters');
 const disabledFields = document.querySelectorAll('select.map__filter, fieldset');
+
+const setDisabledForms = () => {
+  disabledForm.classList.toggle('ad-form--disabled');
+  disabledFormFilters.classList.toggle('ad-form--disabled');
+};
 
 const setDisabledFields = () => {
   disabledFields.forEach((item) => {
@@ -21,6 +34,7 @@ const setDisabledFields = () => {
   });
 };
 
+setDisabledForms();
 setDisabledFields();
 
 const offerType = document.querySelector('#type');
@@ -53,9 +67,9 @@ offerPrice.addEventListener('input', onOfferPriceInput);
 const guestNumber = document.querySelectorAll('#capacity > option');
 const roomNumber = document.querySelector('#room_number');
 
+
 const validateRooms = () => {
   const roomValue = roomNumber.value;
-  console.log(roomValue);
   guestNumber.forEach((guest) => {
     // в зависимости от количества комнат получаем нужный массив строк из объекта numberOfGuests
     //с помощью метода indexOf смотрим, есть ли в этом массиве элемен равный значению value из option в переменной guestNumber
@@ -69,10 +83,25 @@ const validateRooms = () => {
   });
 };
 
-validateRooms();
 const onRoomNumberChange = () => {
   validateRooms();
 };
 roomNumber.addEventListener('change', onRoomNumberChange);
+
+const timeCheckIn = document.querySelector('#timein');
+const timeCheckOut = document.querySelector('#timeout');
+
+const onTimeInChange = () => {
+  const index = TIME_CHECKIN.indexOf(timeCheckIn.value);
+  timeCheckOut[index].selected = true;
+};
+
+const onTimeOutChange = () => {
+  const index = TIME_CHECKIN.indexOf(timeCheckOut.value);
+  timeCheckIn[index].selected = true;
+};
+
+timeCheckIn.addEventListener('change', onTimeInChange);
+timeCheckOut.addEventListener('change', onTimeOutChange);
 
 export { offerPrice };
