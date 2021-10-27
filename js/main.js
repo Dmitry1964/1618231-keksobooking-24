@@ -1,1 +1,2 @@
-import {mapCanvas} from './cards.js';
+import { mapCanvas } from './cards.js';
+import { offerPrice } from './form.js';
