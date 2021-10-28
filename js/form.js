@@ -104,4 +104,4 @@ const onTimeOutChange = () => {
 timeCheckIn.addEventListener('change', onTimeInChange);
 timeCheckOut.addEventListener('change', onTimeOutChange);
 
-export { offerPrice };
+export { setDisabledForms, setDisabledFields };

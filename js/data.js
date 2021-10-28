@@ -94,21 +94,21 @@ const getRandomVar = (min, max, decimalPlaces) => {
 
 
 const getArrayElements = (elements) => {
-  const  getElement = () => {
+  const getElement = () => {
     const index = getRandomInt(0, elements.length - 1);
     return elements[index];
   };
   const arrayLen = getRandomInt(0, elements.length);
-  const ArrayElements = Array.from({length: arrayLen}, getElement);
+  const ArrayElements = Array.from({ length: arrayLen }, getElement);
   return [...new Set(ArrayElements)];
 };
 
 // функция возвращает  случайный элемент массива
-const getRandomElement = (elements) => elements[getRandomInt(0, elements.length-1)];
+const getRandomElement = (elements) => elements[getRandomInt(0, elements.length - 1)];
 
 const getAuthorHousing = (index) => {
   index = index + 1;
-  return { avatar: `img/avatars/user${(index <= 9) ? `0${  index}` : index  }.png`};
+  return { avatar: `img/avatars/user${(index <= 9) ? `0${index}` : index}.png` };
 };
 
 const getLocationHousing = () => ({
@@ -118,7 +118,7 @@ const getLocationHousing = () => ({
 
 const getOfferHousing = () => ({
   title: getRandomElement(OFFER_TITLE),
-  address: `${getRandomVar(...LOCATION_LAT)  },${  getRandomVar(...LOCATION_LNG)}`,
+  address: `${getRandomVar(...LOCATION_LAT)},${getRandomVar(...LOCATION_LNG)}`,
   price: getRandomInt(price.MIN, price.MAX),
   type: getRandomElement(HOUSING_TYPE),
   rooms: getRandomInt(rooms.MIN, rooms.MAX),
@@ -126,7 +126,7 @@ const getOfferHousing = () => ({
   checkin: getRandomElement(TIME_CHECKIN),
   checkout: getRandomElement(TIME_CHECKIN),
   features: getArrayElements(HOUSING_FEATURE),
-  description: getRandomElement(HOUSING_DESCRIPTION) ,
+  description: getRandomElement(HOUSING_DESCRIPTION),
   photos: getArrayElements(HOUSING_PHOTOS),
 });
 
@@ -139,4 +139,4 @@ for (let i = 0; i <= BASE_HOUSING_COUNT - 1; i++) {
   });
 }
 
-export {baseHousings};
+export { baseHousings };

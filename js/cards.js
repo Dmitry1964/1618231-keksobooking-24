@@ -1,4 +1,4 @@
-import {baseHousings as offers} from './data.js';
+import { baseHousings as offers } from './data.js';
 import { numDecline } from './utilits.js';
 
 const mapCanvas = document.querySelector('.map__canvas');
@@ -23,7 +23,7 @@ const getFeaturesPopup = (index, listElement) => {
   const featuresItems = listElement.querySelectorAll('.popup__feature');
   const featureModList = offers[index].offer.features;
   featuresItems.forEach((featuresItem) => {
-    const target = featureModList.some((featureModItem) => featuresItem.classList.contains(`popup__feature--${  featureModItem}`),
+    const target = featureModList.some((featureModItem) => featuresItem.classList.contains(`popup__feature--${featureModItem}`),
     );
     if (!target) {
       featuresItem.remove();
@@ -48,7 +48,7 @@ const getPhotosPopup = (index, listPhotos) => {
 
 const getCardsHousing = (arr) => {
   const { avatar } = arr.author;
-  const { title, address, price, type, rooms, quests, checkin, checkout, features, description, photos} = arr.offer;
+  const { title, address, price, type, rooms, quests, checkin, checkout, features, description, photos } = arr.offer;
   const element = template.cloneNode(true);
   const avatarPopup = element.querySelector('.popup__avatar');
   const titlePopup = element.querySelector('.popup__title');
@@ -64,21 +64,19 @@ const getCardsHousing = (arr) => {
   (avatar) ? avatarPopup.src = arr.author.avatar : avatarPopup.classList.add('hidden');
   (title) ? titlePopup.textContent = title : titlePopup.classList.add('hidden');
   (address) ? addressPopup.textContent = address : addressPopup.classList.add('hidden');
-  (price) ? pricePopup.textContent = `${price  } ₽/ночь` : pricePopup.classList.add('hidden');
+  (price) ? pricePopup.textContent = `${price} ₽/ночь` : pricePopup.classList.add('hidden');
   (type) ? typePopup.textContent = getTypeHousing(type) : typePopup.classList.add('hidden');
   (!rooms || !quests) ?
     capacityPopup.classList.add('hidden') :
-    capacityPopup.textContent = `${rooms  } ${  numDecline(rooms, 'комната', 'комнаты', 'комнат')} для ${  `${quests  } ${  numDecline(quests, 'гостя', 'гостей', 'гостей')}`  } `;
+    capacityPopup.textContent = `${rooms} ${numDecline(rooms, 'комната', 'комнаты', 'комнат')} для ${`${quests} ${numDecline(quests, 'гостя', 'гостей', 'гостей')}`} `;
   (!checkin || !checkout) ?
     timePopup.classList.add('hidden') :
-    timePopup.textContent = `Заезд после ${  checkin  } , выезд до${  checkout}`;
+    timePopup.textContent = `Заезд после ${checkin} , выезд до${checkout}`;
   (features.length !== 0) ? getFeaturesPopup(0, featuresList) : featuresList.classList.add('hidden');
   (description) ? descriptionPopup.textContent = description : descriptionPopup.classList.add('hidden');
   (photos.length !== 0) ? getPhotosPopup(0, photosPopupList) : photosPopupList.classList.add('hidden');
   return element;
 };
 
-fragment.appendChild(getCardsHousing(offers[0]));
-
 mapCanvas.appendChild(fragment);
-export {mapCanvas};
+export { getCardsHousing };
