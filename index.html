@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="leaflet/leaflet.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кексобукинг</title>
 </head>
@@ -102,13 +103,13 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text" value="25.25656, 25.56568" readonly>
+          <input id="address" name="address" type="text" readonly>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
           <select id="type" name="type">
-            <option value="bungalow">Бунгало</option>
             <option value="flat" selected>Квартира</option>
+            <option value="bungalow">Бунгало</option>
             <option value="hotel">Отель</option>
             <option value="house">Дом</option>
             <option value="palace">Дворец</option>
@@ -143,9 +144,9 @@
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="capacity">Количество мест</label>
           <select id="capacity" name="capacity">
-            <option value="3">для 3 гостей</option>
-            <option value="2">для 2 гостей</option>
             <option value="1" selected>для 1 гостя</option>
+            <option value="2">для 2 гостей</option>
+            <option value="3">для 3 гостей</option>
             <option value="0">не для гостей</option>
           </select>
         </fieldset>
@@ -253,6 +254,7 @@
     </div>
   </template>
   <script src="js/main.js" type="module"></script>
+  <script src="leaflet/leaflet.js"></script>
 </body>
 
 </html>

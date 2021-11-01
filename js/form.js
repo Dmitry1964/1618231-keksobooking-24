@@ -1,3 +1,4 @@
+const FIRST_ITEM = 0;
 const TIME_CHECKIN = [
   '12:00',
   '13:00',
@@ -33,9 +34,6 @@ const setDisabledFields = () => {
     item.disabled = !item.disabled;
   });
 };
-
-setDisabledForms();
-setDisabledFields();
 
 const offerType = document.querySelector('#type');
 const offerPrice = document.querySelector('#price');
@@ -104,4 +102,28 @@ const onTimeOutChange = () => {
 timeCheckIn.addEventListener('change', onTimeInChange);
 timeCheckOut.addEventListener('change', onTimeOutChange);
 
-export { offerPrice };
+const resetButton = document.querySelector('.ad-form__reset');
+const fieldTitle = document.querySelector('#title');
+const fieldSelect = document.querySelectorAll('select');
+const inputPrice = document.querySelector('#price');
+const inputDescription = document.querySelector('#description');
+const inputCheckbox = document.querySelectorAll('input[type=checkbox]');
+
+const onResetButtonClick = () => {
+  fieldTitle.value = '';
+  inputPrice.value = '';
+  inputPrice.placeholder = minOfferPrice.flat;
+  inputDescription.value = '';
+  fieldSelect.forEach((element) => {
+    const optionItems = element.querySelectorAll('option');
+    optionItems[FIRST_ITEM].selected = true;
+  });
+  inputCheckbox.forEach((element) => {
+    element.checked = false;
+  });
+};
+
+resetButton.addEventListener('click', onResetButtonClick);
+
+
+export { setDisabledFields, setDisabledForms, resetButton };
