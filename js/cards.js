@@ -1,5 +1,4 @@
 import { numDecline } from './utilits.js';
-
 const templateFragment = document.querySelector('#card').content;
 const template = templateFragment.querySelector('.popup');
 
@@ -43,7 +42,7 @@ const getPhotosPopup = (photos, listPhotos) => {
 
 const getCardsHousing = (arr) => {
   const { avatar } = arr.author;
-  const { title, address, price, type, rooms, quests, checkin, checkout, features, description, photos } = arr.offer;
+  const { title, address, price, type, rooms, guests, checkin, checkout, features, description, photos } = arr.offer;
   const element = template.cloneNode(true);
   const avatarPopup = element.querySelector('.popup__avatar');
   const titlePopup = element.querySelector('.popup__title');
@@ -76,11 +75,11 @@ const getCardsHousing = (arr) => {
     typePopup.textContent = getTypeHousing(type);
   } else { typePopup.classList.add('hidden'); }
 
-  if (!rooms || !quests) {
+  if (!rooms || !guests) {
     capacityPopup.classList.add('hidden');
   } else {
-    capacityPopup.textContent = `${rooms} ${numDecline(rooms, 'комната', 'комнаты', 'комнат')} для ${`${quests}
-   ${numDecline(quests, 'гостя', 'гостей', 'гостей')}`} `;
+    capacityPopup.textContent = `${rooms} ${numDecline(rooms, 'комната', 'комнаты', 'комнат')} для ${`${guests}
+   ${numDecline(guests, 'гостя', 'гостей', 'гостей')}`} `;
   }
 
   if (!checkin || !checkout) {
@@ -89,7 +88,7 @@ const getCardsHousing = (arr) => {
     timePopup.textContent = `Заезд после ${checkin} , выезд до${checkout}`;
   }
 
-  if (features.length !== 0) {
+  if (features) {
     getFeaturesPopup(features, featuresList);
   } else { featuresList.classList.add('hidden'); }
 
@@ -97,7 +96,7 @@ const getCardsHousing = (arr) => {
     descriptionPopup.textContent = description;
   } else { descriptionPopup.classList.add('hidden'); }
 
-  if (photos.length !== 0) {
+  if (photos) {
     getPhotosPopup(photos, photosPopupList);
   } else { photosPopupList.classList.add('hidden'); }
   return element;

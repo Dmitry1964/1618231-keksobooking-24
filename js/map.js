@@ -1,11 +1,12 @@
 import { setDisabledForms, setDisabledFields, resetButton } from './form.js';
-import { baseHousings as offers } from './data.js';
 import { getCardsHousing } from './cards.js';
 
 const DECIMAL_PLACES = 5;
 const ZOOM = 12;
 const ICON_SIZE = [52, 52];
 const ICON_ANCHOR = [26, 52];
+const ICON_OFFER_SIZE = [40, 40];
+const ICON_OFFER_ANCHOR = [20, 40];
 const MAP_ADDRESS = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const downTown = {
   lat: 35.65283,
@@ -71,8 +72,8 @@ const setMarkerDefault = () => {
 
 const iconPoint = L.icon({
   iconUrl: 'img/pin.svg',
-  iconSize: ICON_SIZE,
-  iconAnchor: ICON_ANCHOR,
+  iconSize: ICON_OFFER_SIZE,
+  iconAnchor: ICON_OFFER_ANCHOR,
 });
 
 const getPoints = (item) => {
@@ -90,19 +91,25 @@ const getPoints = (item) => {
     .bindPopup(getCardsHousing(item));
 };
 
-offers.forEach((element) => {
-  getPoints(element);
-});
+const setData = (arr) => {
+  arr.forEach((element) => {
+    getPoints(element);
+  });
+};
 
-
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
+const DefaultMap = () => {
   setMarkerDefault();
   map.setView({
     lat: downTown.lat,
     lng: downTown.lng,
   }, ZOOM);
   map.closePopup();
+};
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  DefaultMap();
 });
 
-export { map };
+
+export { map, setData, DefaultMap };
