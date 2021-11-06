@@ -1,27 +1,24 @@
-import { showAlert } from './utilits.js';
-
-
-const MESSAGE_FAIL_DATA = 'Ошибка загрузки данных Пожалуйста обновите страницу.';
-const addressSite = {
-  load: 'https://24.javascript.pages.academy/keksobooking/data',
-  send: ' https://24.javascript.pages.academy/keksobooking',
+const Urls = {
+  GET: 'https://24.javascript.pages.academy/keksobooking/data',
+  POST: ' https://24.javascript.pages.academy/keksobooking',
 };
 
-
-const getData = (onSuccess) => {
-  fetch(addressSite.load)
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-    })
-    .then((offers) => {
-      onSuccess(offers);
+const request = (onSuccess, onError, method, body) => {
+  fetch(
+    Urls[method],
+    {
+      method: method,
+      body: body,
+    },
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      onSuccess(data);
     })
     .catch(() => {
-      showAlert(MESSAGE_FAIL_DATA);
+      onError();
     });
 };
 
-export { getData };
+export { request };
 

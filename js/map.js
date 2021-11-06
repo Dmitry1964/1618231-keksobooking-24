@@ -1,4 +1,4 @@
-import { setDisabledForms, setDisabledFields, resetButton } from './form.js';
+import { setDisabledForms, setDisabledFields } from './form.js';
 import { getCardsHousing } from './cards.js';
 
 const DECIMAL_PLACES = 5;
@@ -18,15 +18,7 @@ const mapAttribution = {
 
 const addressOnMap = document.querySelector('#address');
 
-const map = L.map('map-canvas')
-  .on('load', () => {
-    setDisabledForms();
-    setDisabledFields();
-  })
-  .setView({
-    lat: downTown.lat,
-    lng: downTown.lng,
-  }, ZOOM);
+const map = L.map('map-canvas');
 
 L.tileLayer(MAP_ADDRESS,
   { mapAttribution },
@@ -76,7 +68,7 @@ const iconPoint = L.icon({
   iconAnchor: ICON_OFFER_ANCHOR,
 });
 
-const getPoints = (item) => {
+const getPoint = (item) => {
   const marker = L.marker(
     {
       lat: item.location.lat,
@@ -91,13 +83,13 @@ const getPoints = (item) => {
     .bindPopup(getCardsHousing(item));
 };
 
-const setData = (arr) => {
+const setPoints = (arr) => {
   arr.forEach((element) => {
-    getPoints(element);
+    getPoint(element);
   });
 };
 
-const DefaultMap = () => {
+const setMapDefault = () => {
   setMarkerDefault();
   map.setView({
     lat: downTown.lat,
@@ -106,10 +98,14 @@ const DefaultMap = () => {
   map.closePopup();
 };
 
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  DefaultMap();
-});
+map.on('load', () => {
+  setDisabledForms();
+  setDisabledFields();
+})
+  .setView({
+    lat: downTown.lat,
+    lng: downTown.lng,
+  }, ZOOM);
 
 
-export { map, setData, DefaultMap };
+export { map, setPoints, setMapDefault };

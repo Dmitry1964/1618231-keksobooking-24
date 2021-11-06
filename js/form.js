@@ -1,3 +1,6 @@
+import { setMapDefault } from './map.js';
+import { request } from './api.js';
+
 const FIRST_ITEM = 0;
 const TIME_CHECKIN = [
   '12:00',
@@ -61,7 +64,6 @@ const onOfferPriceInput = () => {
 
 offerPrice.addEventListener('input', onOfferPriceInput);
 
-///////////////////////////////////////////////////////////////////////
 const guestNumber = document.querySelectorAll('#capacity > option');
 const roomNumber = document.querySelector('#room_number');
 
@@ -117,13 +119,17 @@ const getClearForm = () => {
   inputCheckbox.forEach((element) => {
     element.checked = false;
   });
+  setMapDefault();
 };
 
 const onResetButtonClick = () => {
   getClearForm();
 };
 
-resetButton.addEventListener('click', onResetButtonClick);
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  onResetButtonClick();
+});
 
 const FragmentSuccess = document.querySelector('#success').content;
 const FragmentError = document.querySelector('#error').content;
@@ -137,32 +143,22 @@ const showAlertSuccess = () => {
 const showAlertError = () => {
   document.body.appendChild(templateError);
 };
-////////////////////////////////////////////////////////
-userForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
 
-  const formData = new FormData(evt.target);
+const setUserFormSubmit = () => {
+  const onSuccess = () => {
+    showAlertSuccess();
+    getClearForm();
+  };
+  const onError = () => {
+    showAlertError();
+  };
+  userForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const body = new FormData(evt.target);
 
-  fetch(
-    'https://24.javascript.pages.academy/keksobooking',
-    {
-      method: 'POST',
-      body: formData,
-    },
-  )
-    .then((response) => {
-      if (response.ok) {
-        showAlertSuccess();
-        getClearForm();
-      } else {
-        showAlertError();
-      }
-    })
-    .catch(() => {
-      showAlertError();
-    });
-});
-
+    request(onSuccess, onError, 'POST', body);
+  });
+};
 
 window.addEventListener('keydown', (evt) => {
   if (evt.key === 'Escape') {
@@ -176,4 +172,4 @@ window.addEventListener('click', () => {
   templateError.remove();
 });
 
-export { setDisabledFields, setDisabledForms, resetButton };
+export { setDisabledFields, setDisabledForms, setUserFormSubmit };

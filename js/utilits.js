@@ -20,6 +20,7 @@ const showAlert = (message) => {
   messageContainer.style.top = '150px';
   messageContainer.style.width = '600px';
   messageContainer.style.height = '180px';
+  messageContainer.style.borderRadius = '10px';
   messageContainer.style.padding = '50px';
   messageContainer.style.color = 'white';
   messageContainer.style.fontSize = '30px';
