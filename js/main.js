@@ -1,5 +1,22 @@
-import { setDisabledFields, setDisabledForms } from './form.js';
-import './map.js';
+import { setUserFormSubmit } from './form.js';
+import { setPoints } from './map.js';
+import { request } from './api.js';
+import { showAlert } from './utilits.js';
 
-window.addEventListener('load', setDisabledFields);
-window.addEventListener('load', setDisabledForms);
+const MESSAGE_FAIL_DATA = 'Ошибка загрузки данных Пожалуйста обновите страницу.';
+
+let points = [];
+
+const onSuccess = (data) => {
+  points = data.slice();
+  setPoints(data);
+};
+const OnError = () => {
+  showAlert(MESSAGE_FAIL_DATA);
+};
+
+request(onSuccess, OnError, 'GET');
+
+setUserFormSubmit();
+
+export { points };

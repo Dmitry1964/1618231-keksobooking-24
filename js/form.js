@@ -1,3 +1,6 @@
+import { setMapDefault } from './map.js';
+import { request } from './api.js';
+
 const FIRST_ITEM = 0;
 const TIME_CHECKIN = [
   '12:00',
@@ -61,7 +64,6 @@ const onOfferPriceInput = () => {
 
 offerPrice.addEventListener('input', onOfferPriceInput);
 
-///////////////////////////////////////////////////////////////////////
 const guestNumber = document.querySelectorAll('#capacity > option');
 const roomNumber = document.querySelector('#room_number');
 
@@ -69,12 +71,7 @@ const roomNumber = document.querySelector('#room_number');
 const validateRooms = () => {
   const roomValue = roomNumber.value;
   guestNumber.forEach((guest) => {
-    // в зависимости от количества комнат получаем нужный массив строк из объекта numberOfGuests
-    //с помощью метода indexOf смотрим, есть ли в этом массиве элемен равный значению value из option в переменной guestNumber
-    //если есть, то метод возвращает нам индекс элемента. он не равен -1, поэтому получаем булево false
-    // если элемента нет метод возвращает -1, булево true. Дальше присваиваем атрибутам disabled и hidden полученные булево.
     const isDisabled = (numberOfGuests[roomValue].indexOf(guest.value) === -1);
-    // здесь делам так, чтобы option, у которого value равен первому елементу в массиве строк, имел атрибут selected = true;
     guest.selected = numberOfGuests[roomValue][0] === guest.value;
     guest.disabled = isDisabled;
     guest.hidden = isDisabled;
@@ -102,6 +99,7 @@ const onTimeOutChange = () => {
 timeCheckIn.addEventListener('change', onTimeInChange);
 timeCheckOut.addEventListener('change', onTimeOutChange);
 
+const userForm = document.querySelector('.ad-form');
 const resetButton = document.querySelector('.ad-form__reset');
 const fieldTitle = document.querySelector('#title');
 const fieldSelect = document.querySelectorAll('select');
@@ -109,7 +107,7 @@ const inputPrice = document.querySelector('#price');
 const inputDescription = document.querySelector('#description');
 const inputCheckbox = document.querySelectorAll('input[type=checkbox]');
 
-const onResetButtonClick = () => {
+const getClearForm = () => {
   fieldTitle.value = '';
   inputPrice.value = '';
   inputPrice.placeholder = minOfferPrice.flat;
@@ -121,9 +119,57 @@ const onResetButtonClick = () => {
   inputCheckbox.forEach((element) => {
     element.checked = false;
   });
+  setMapDefault();
 };
 
-resetButton.addEventListener('click', onResetButtonClick);
+const onResetButtonClick = () => {
+  getClearForm();
+};
 
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  onResetButtonClick();
+});
 
-export { setDisabledFields, setDisabledForms, resetButton };
+const FragmentSuccess = document.querySelector('#success').content;
+const FragmentError = document.querySelector('#error').content;
+const templateSuccess = FragmentSuccess.querySelector('.success');
+const templateError = FragmentError.querySelector('.error');
+
+const showAlertSuccess = () => {
+  document.body.appendChild(templateSuccess);
+};
+
+const showAlertError = () => {
+  document.body.appendChild(templateError);
+};
+
+const setUserFormSubmit = () => {
+  const onSuccess = () => {
+    showAlertSuccess();
+    getClearForm();
+  };
+  const onError = () => {
+    showAlertError();
+  };
+  userForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const body = new FormData(evt.target);
+
+    request(onSuccess, onError, 'POST', body);
+  });
+};
+
+window.addEventListener('keydown', (evt) => {
+  if (evt.key === 'Escape') {
+    templateSuccess.remove();
+    templateError.remove();
+  }
+});
+
+window.addEventListener('click', () => {
+  templateSuccess.remove();
+  templateError.remove();
+});
+
+export { setDisabledFields, setDisabledForms, setUserFormSubmit };
