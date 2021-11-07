@@ -1,4 +1,3 @@
-import { setDisabledForms, setDisabledFields } from './form.js';
 import { getCardsHousing } from './cards.js';
 
 const DECIMAL_PLACES = 5;
@@ -18,7 +17,12 @@ const mapAttribution = {
 
 const addressOnMap = document.querySelector('#address');
 
-const map = L.map('map-canvas');
+const map = L.map('map-canvas')
+  .setView({
+    lat: downTown.lat,
+    lng: downTown.lng,
+  }, ZOOM);
+
 
 L.tileLayer(MAP_ADDRESS,
   { mapAttribution },
@@ -97,15 +101,4 @@ const setMapDefault = () => {
   }, ZOOM);
   map.closePopup();
 };
-
-map.on('load', () => {
-  setDisabledForms();
-  setDisabledFields();
-})
-  .setView({
-    lat: downTown.lat,
-    lng: downTown.lng,
-  }, ZOOM);
-
-
 export { map, setPoints, setMapDefault };

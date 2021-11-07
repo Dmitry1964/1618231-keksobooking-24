@@ -1,14 +1,9 @@
-import { setUserFormSubmit, setDisabledFields, setDisabledForms } from './form.js';
+import { setUserFormSubmit } from './form.js';
 import { setPoints } from './map.js';
 import { request } from './api.js';
 import { showAlert } from './utilits.js';
 
 const MESSAGE_FAIL_DATA = 'Ошибка загрузки данных Пожалуйста обновите страницу.';
-
-document.addEventListener('DOMContentLoaded', () => {
-  setDisabledFields();
-  setDisabledForms();
-});
 
 let points = [];
 
