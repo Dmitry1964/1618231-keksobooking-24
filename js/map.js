@@ -106,8 +106,8 @@ const setPoints = (arr) => {
 
 const onFilterChange = debounce(() => {
   removeMarkers();
-  setPoints(filterData(points)), TIME_OUT;
-});
+  setPoints(filterData(points));
+}, TIME_OUT);
 
 mapFilters.addEventListener('change', onFilterChange);
 
