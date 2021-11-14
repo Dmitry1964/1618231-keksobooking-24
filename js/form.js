@@ -1,8 +1,10 @@
-import { setMapDefault } from './map.js';
+import { setMapDefault, removeMarkers, onFilterChange } from './map.js';
 import { request } from './api.js';
+import { isEscape } from './utilits.js';
 
 const FIRST_ITEM = 0;
-const TIME_CHECKIN = [
+const TITLE_LENGTH = 30;
+const TIMES_CHICKIN = [
   '12:00',
   '13:00',
   '14:00',
@@ -23,23 +25,23 @@ const numberOfGuests = {
   100: ['0'],
 };
 
-const disabledForm = document.querySelector('.ad-form');
-const disabledFormFilters = document.querySelector('.map__filters');
-const disabledFields = document.querySelectorAll('select.map__filter, fieldset');
+const adForm = document.querySelector('.ad-form');
+const mapFilters = document.querySelector('.map__filters');
+const filterFields = mapFilters.querySelectorAll('select.map__filter, fieldset');
 
 const setDisabledForms = () => {
-  disabledForm.classList.toggle('ad-form--disabled');
-  disabledFormFilters.classList.toggle('ad-form--disabled');
+  adForm.classList.toggle('ad-form--disabled');
+  mapFilters.classList.toggle('ad-form--disabled');
 };
 
 const setDisabledFields = () => {
-  disabledFields.forEach((item) => {
+  filterFields.forEach((item) => {
     item.disabled = !item.disabled;
   });
 };
 
-const offerType = document.querySelector('#type');
-const offerPrice = document.querySelector('#price');
+const offerType = adForm.querySelector('#type');
+const offerPrice = adForm.querySelector('#price');
 
 const onOfferTypeChange = () => {
   offerPrice.value = '';
@@ -64,8 +66,8 @@ const onOfferPriceInput = () => {
 
 offerPrice.addEventListener('input', onOfferPriceInput);
 
-const guestNumber = document.querySelectorAll('#capacity > option');
-const roomNumber = document.querySelector('#room_number');
+const guestNumber = adForm.querySelectorAll('#capacity > option');
+const roomNumber = adForm.querySelector('#room_number');
 
 
 const validateRooms = () => {
@@ -83,16 +85,16 @@ const onRoomNumberChange = () => {
 };
 roomNumber.addEventListener('change', onRoomNumberChange);
 
-const timeCheckIn = document.querySelector('#timein');
-const timeCheckOut = document.querySelector('#timeout');
+const timeCheckIn = adForm.querySelector('#timein');
+const timeCheckOut = adForm.querySelector('#timeout');
 
 const onTimeInChange = () => {
-  const index = TIME_CHECKIN.indexOf(timeCheckIn.value);
+  const index = TIMES_CHICKIN.indexOf(timeCheckIn.value);
   timeCheckOut[index].selected = true;
 };
 
 const onTimeOutChange = () => {
-  const index = TIME_CHECKIN.indexOf(timeCheckOut.value);
+  const index = TIMES_CHICKIN.indexOf(timeCheckOut.value);
   timeCheckIn[index].selected = true;
 };
 
@@ -100,26 +102,38 @@ timeCheckIn.addEventListener('change', onTimeInChange);
 timeCheckOut.addEventListener('change', onTimeOutChange);
 
 const userForm = document.querySelector('.ad-form');
-const resetButton = document.querySelector('.ad-form__reset');
-const fieldTitle = document.querySelector('#title');
-const fieldSelect = document.querySelectorAll('select');
-const inputPrice = document.querySelector('#price');
-const inputDescription = document.querySelector('#description');
-const inputCheckbox = document.querySelectorAll('input[type=checkbox]');
+const resetButton = adForm.querySelector('.ad-form__reset');
+const fieldTitle = adForm.querySelector('#title');
+const fieldSelectForm = adForm.querySelectorAll('select');
+const fieldSelectFilters = mapFilters.querySelectorAll('select');
+const inputPrice = adForm.querySelector('#price');
+const inputDescription = adForm.querySelector('#description');
+const inputCheckboxFilter = mapFilters.querySelectorAll('input[type=checkbox]');
+const inputCheckboxForm = adForm.querySelectorAll('input[type=checkbox]');
 
 const getClearForm = () => {
   fieldTitle.value = '';
   inputPrice.value = '';
   inputPrice.placeholder = minOfferPrice.flat;
   inputDescription.value = '';
-  fieldSelect.forEach((element) => {
+  fieldSelectForm.forEach((element) => {
     const optionItems = element.querySelectorAll('option');
     optionItems[FIRST_ITEM].selected = true;
   });
-  inputCheckbox.forEach((element) => {
+  fieldSelectFilters.forEach((element) => {
+    const optionItems = element.querySelectorAll('option');
+    optionItems[FIRST_ITEM].selected = true;
+  });
+  inputCheckboxFilter.forEach((element) => {
+    element.checked = false;
+  });
+  inputCheckboxForm.forEach((element) => {
     element.checked = false;
   });
   setMapDefault();
+  removeMarkers();
+  onFilterChange();
+
 };
 
 const onResetButtonClick = () => {
@@ -144,6 +158,18 @@ const showAlertError = () => {
   document.body.appendChild(templateError);
 };
 
+const onAlertEscKeydown = (evt) => {
+  if (isEscape(evt)) {
+    templateSuccess.remove();
+    templateError.remove();
+  }
+};
+
+const onAlertClick = () => {
+  templateSuccess.remove();
+  templateError.remove();
+};
+
 const setUserFormSubmit = () => {
   const onSuccess = () => {
     showAlertSuccess();
@@ -152,24 +178,41 @@ const setUserFormSubmit = () => {
   const onError = () => {
     showAlertError();
   };
+
+  const onButtonSubmitClick = () => {
+    const titleField = adForm.querySelector('#title');
+    const priceField = adForm.querySelector('#price');
+    if (titleField.value.length < TITLE_LENGTH) {
+      titleField.style.borderWidth = '5px';
+      titleField.style.borderColor = 'red';
+    } else {
+      titleField.style.border = 'none';
+    }
+
+    if (priceField.value < parseInt(priceField.min, 10) || priceField.value > parseInt(priceField.max, 10)) {
+      priceField.style.borderWidth = '5px';
+      priceField.style.borderColor = 'red';
+    } else {
+      priceField.style.border = 'none';
+    }
+  };
+
+  const buttonSubmit = adForm.querySelector('.ad-form__submit');
+
+  buttonSubmit.addEventListener('click', () => {
+    onButtonSubmitClick();
+  });
+
+
   userForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
+
     const body = new FormData(evt.target);
 
     request(onSuccess, onError, 'POST', body);
+
+    document.addEventListener('keydown', onAlertEscKeydown);
+    document.addEventListener('click', onAlertClick);
   });
 };
-
-window.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
-    templateSuccess.remove();
-    templateError.remove();
-  }
-});
-
-window.addEventListener('click', () => {
-  templateSuccess.remove();
-  templateError.remove();
-});
-
 export { setDisabledFields, setDisabledForms, setUserFormSubmit };
