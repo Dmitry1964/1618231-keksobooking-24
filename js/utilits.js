@@ -1,4 +1,5 @@
 const ALERT_SHOW_TIME = 3000;
+const ESC_KEY = 'Escape';
 
 const numDecline = (num, nominative, genitiveSingular, genitivePlural) => {
   const numberStr = num.toString().slice(-2).split('').reverse();
@@ -35,4 +36,7 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export { numDecline, showAlert };
+const isEscape = (evt) => evt.key === ESC_KEY;
+
+
+export { numDecline, showAlert, isEscape };

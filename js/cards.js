@@ -57,48 +57,48 @@ const getCardsHousing = (arr) => {
 
   if (avatar) {
     avatarPopup.src = arr.author.avatar;
-  } else { avatarPopup.classList.add('hidden'); }
+  } else { avatarPopup.remove(); }
 
   if (title) {
     titlePopup.textContent = title;
-  } else { titlePopup.classList.add('hidden'); }
+  } else { titlePopup.remove(); }
 
   if (address) {
     addressPopup.textContent = address;
-  } else { addressPopup.classList.add('hidden'); }
+  } else { addressPopup.remove(); }
 
   if (price) {
     pricePopup.textContent = `${price} ₽/ночь`;
-  } else { pricePopup.classList.add('hidden'); }
+  } else { pricePopup.remove(); }
 
   if (type) {
     typePopup.textContent = getTypeHousing(type);
-  } else { typePopup.classList.add('hidden'); }
+  } else { typePopup.remove(); }
 
   if (!rooms || !guests) {
-    capacityPopup.classList.add('hidden');
+    capacityPopup.remove();
   } else {
     capacityPopup.textContent = `${rooms} ${numDecline(rooms, 'комната', 'комнаты', 'комнат')} для ${`${guests}
    ${numDecline(guests, 'гостя', 'гостей', 'гостей')}`} `;
   }
 
   if (!checkin || !checkout) {
-    timePopup.classList.add('hidden');
+    timePopup.remove();
   } else {
     timePopup.textContent = `Заезд после ${checkin} , выезд до${checkout}`;
   }
 
   if (features) {
     getFeaturesPopup(features, featuresList);
-  } else { featuresList.classList.add('hidden'); }
+  } else { featuresList.remove(); }
 
   if (description) {
     descriptionPopup.textContent = description;
-  } else { descriptionPopup.classList.add('hidden'); }
+  } else { descriptionPopup.remove(); }
 
   if (photos) {
     getPhotosPopup(photos, photosPopupList);
-  } else { photosPopupList.classList.add('hidden'); }
+  } else { photosPopupList.remove(); }
   return element;
 };
 
