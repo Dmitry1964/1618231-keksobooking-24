@@ -3,11 +3,13 @@ import { request } from './api.js';
 import { showAlert } from './utilits.js';
 import { filterData } from './filter.js';
 import { toggleSwitch } from './main.js';
+import { debounce } from './utils/debounce.js';
 
 const MAX_OFFERS = 10;
 const MESSAGE_FAIL_DATA = 'Ошибка загрузки данных Пожалуйста обновите страницу.';
 const DECIMAL_PLACES = 5;
 const ZOOM = 12;
+const TIME_OUT = 500;
 const ICON_SIZIES = [52, 52];
 const ICON_ANCHOR_SIZIES = [26, 52];
 const ICON_OFFER_SIZES = [40, 40];
@@ -102,11 +104,10 @@ const setPoints = (arr) => {
   });
 };
 
-
-const onFilterChange = () => {
+const onFilterChange = debounce(() => {
   removeMarkers();
-  setPoints(filterData(points));
-};
+  setPoints(filterData(points)), TIME_OUT;
+});
 
 mapFilters.addEventListener('change', onFilterChange);
 
