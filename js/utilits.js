@@ -46,6 +46,4 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-
-
 export { numDecline, showAlert, isEscape, debounce };
