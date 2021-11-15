@@ -3,7 +3,7 @@ import { request } from './api.js';
 import { showAlert } from './utilits.js';
 import { filterData } from './filter.js';
 import { toggleSwitch } from './main.js';
-import { debounce } from './utils/debounce.js';
+import { debounce } from './utilits.js';
 
 const MAX_OFFERS = 10;
 const MESSAGE_FAIL_DATA = 'Ошибка загрузки данных Пожалуйста обновите страницу.';
@@ -117,12 +117,12 @@ const onSuccess = (data) => {
   setPoints(points.slice(0, MAX_OFFERS));
 };
 
-const OnError = () => {
+const onError = () => {
   showAlert(MESSAGE_FAIL_DATA);
 };
 
 map.on('load', () => {
-  request(onSuccess, OnError, 'GET');
+  request(onSuccess, onError, 'GET');
 })
   .setView({
     lat: downTown.lat,

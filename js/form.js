@@ -113,7 +113,9 @@ const inputCheckboxForm = adForm.querySelectorAll('input[type=checkbox]');
 
 const getClearForm = () => {
   fieldTitle.value = '';
+  fieldTitle.style.border = '1px solid #d9d9d3';
   inputPrice.value = '';
+  inputPrice.style.border = '1px solid #d9d9d3';
   inputPrice.placeholder = minOfferPrice.flat;
   inputDescription.value = '';
   fieldSelectForm.forEach((element) => {
@@ -183,15 +185,13 @@ const setUserFormSubmit = () => {
     const titleField = adForm.querySelector('#title');
     const priceField = adForm.querySelector('#price');
     if (titleField.value.length < TITLE_LENGTH) {
-      titleField.style.borderWidth = '5px';
-      titleField.style.borderColor = 'red';
+      titleField.style.border = '5px solid red';
     } else {
       titleField.style.border = 'none';
     }
 
     if (priceField.value < parseInt(priceField.min, 10) || priceField.value > parseInt(priceField.max, 10)) {
-      priceField.style.borderWidth = '5px';
-      priceField.style.borderColor = 'red';
+      priceField.style.border = '5px solid red';
     } else {
       priceField.style.border = 'none';
     }
