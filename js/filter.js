@@ -30,12 +30,10 @@ const filterRules = {
   'housing-features': (data, filter) => {
     const checkListElements = Array.from(filter.querySelectorAll('input[type="checkbox"]:checked'));
 
-    /* Для каждого выбранного эдемента в списке чекбоксов */
     return checkListElements.every((checkbox) => {
-      if (!data.offer.features) {  // а это на тот случай, если фичей в офере нет (фух!)
+      if (!data.offer.features) {
         return false;
       } else {
-        /* смотрим есть ли он в списке фичей в оффере Если есть- возвращается true и точка попадает в массив filteredOffers*/
         return data.offer.features.some((feature) => checkbox.value === feature);
       }
     });
