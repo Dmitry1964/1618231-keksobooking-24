@@ -13,6 +13,9 @@ _`.editorconfig`, `.eslintrc`, `.gitattributes`, `.gitignore`, `package-lock.jso
 [Как работать с Git на проекте](Contributing.md) | [Как работать над проектом](Workflow.md)
 
 Репозиторий создан для обучения на интенсивном онлайн‑курсе «[JavaScript. Профессиональная разработка веб-интерфейсов](https://htmlacademy.ru/intensive/javascript)» от [HTML Academy](https://htmlacademy.ru).
-Для запуска скачайте и разархивируйте проэкт.
+
+
+
+Для запуска скачайте и разархивируйте файл.
 Установите зависимости npm i
 Запустите проект npm start
